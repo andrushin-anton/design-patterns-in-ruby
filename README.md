@@ -132,3 +132,8 @@ Again, this has to big advantages:
 The very simple idea behind the Builder pattern is that you encapsulate object construction logic behind a class of its own. The builder class takes charge of assembling all the components of a complex object. Each builder has an interface that lets you specify the configuration of your new object step by step.
 
 In a sense, a builder is a sort of like a multipart new method, where objects are created in an extended process instead of all in one shot.
+
+---
+### COMPOSITE
+
+The composite design pattern is a structural pattern used to represent objects that have a **hierarchical tree structure**.  It allows for the uniform treatment of both individual leaf nodes and of branches composed of many nodes.
