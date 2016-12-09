@@ -2,6 +2,12 @@
 
 * [Template Method](#template-method)
 * [Strategy](#strategy)
+* [Observer](#observer)
+* [Proxy](#proxy)
+* [Builder](#builder)
+* [Composite](#composite)
+* [Iterator](#iterator)
+* [Commands](#commands)
 
 
 ## Five Main Points
@@ -137,3 +143,77 @@ In a sense, a builder is a sort of like a multipart new method, where objects ar
 ### COMPOSITE
 
 The composite design pattern is a structural pattern used to represent objects that have a **hierarchical tree structure**.  It allows for the uniform treatment of both individual leaf nodes and of branches composed of many nodes.
+
+---
+### ITERATOR
+
+The iterator design pattern provides sequential access to elements within a container without exposing how the container actually represents the elements.  The iterator can be thought of as a moveable pointer that allows access to elements encapsulated within a container.
+
+#### external iterator
+The iteration logic is contained in a separate class.  The iteration class can be generalized to handle multiple object types as long as they allow indexing.
+
+External iterator require the additional class to do the actual iterating, but they do allow for greater flexibility because you can control the iteration, which elements are iterated over and in what order.
+
+#### internal iterator
+All the iterating logic occurs inside the aggregate object.
+Use a code block to pass your logic into the aggregate which then calls the block for each of it's elements.
+
+````ruby
+colors = ['red', 'green', 'blue']
+colors.each { |color| puts color }
+````
+
+#### Enumerable Module
+
+Ruby includes an [Enumerator module](http://ruby-doc.org/core/Enumerable.html)
+
+> The Enumerable mixin provides collection classes with several traversal and searching methods, and with the ability to sort. The class must provide a method each, which yields successive members of the collection. If Enumerable#max, #min, or #sort is used, the objects in the collection must also implement a meaningful <=> operator, as these methods rely on an ordering between members of the collection.
+
+With custom iterator implementations, if the original collection class changes while you're iterating through it's elements, it can create unexpected results.  To remedy this, you can have the iterator operate on a copy of the original collection.
+
+````ruby
+class ArrayIterator
+  def initialize(array)
+    @array = Array.new(array)
+    @index = 0
+  end
+  …
+````
+
+---
+### COMMANDS
+
+The command pattern is a behavior design pattern used to store the information necessary to call methods at a future time.
+
+#### Uses
+
+##### GUI Elements
+For many GUIs, you may have a generic button class that you want to use in many different situations.  In each situation, the button may need to do different things.  One approach would be to create a subclass for each button your interface requires, however this would lead to a excessive number of button classes.  A better approach would be to create separate classes for the code executed when the button is clicked.  This action class can then be passed to the button telling it what the button should do when clicked.
+
+**separate the thing that changes, in this case the action, from the part that stays the same, the generic button object**.  One advantage of this approach is that since the action is passed to the button, it can be changed at runtime.
+
+The command is merely a set of actions wrapped in an object.  With ruby, we can use Procs to do the same thing without the need to create a separate object.  This is a good option when the action is simple and doesn't require saving state information, otherwise, a command class is the better option.
+
+##### Macro Recording
+Many modern applications have the ability to undo actions, including word processors, spreadsheets and databases.  This undo feature can be implemented by using the command design pattern by keeping track what code is executed.
+
+Another great example of macro recording using the command design pattern is the handling of migrations in Ruby on Rails.
+
+To undo actions we need to store some state information, so we must use a command class rather than a simple Proc.
+
+##### Queuing Commands
+Commands allow us to queue commands making applications more convenient for the user and for the system.
+
+###### Installation Wizards
+When installing applications, many will prompt the user with a number of installation options before starting the actual installations.  The user's choices determines which method calls are added to the installer's to-do list.  Without commands, the installation would have to stop periodically to query the user for their preferences.
+
+###### Fixed Overhead
+In some situations there is a fixed overhead to executing a certain type of command.  Queuing up multiple commands and executing them together reduces the number of times we have to run the overhead code.  Database operations are an example of this.  If there isn't a persistent database connection, we have to create one each time we run database operations.  Since there is a cost to connecting to the database, a good approach may be to queue up the database operations and execute them in a batch.  The same logic holds for web applications when you need to make API calls to external applications.
+
+
+### MEDIATOR
+The Mediator pattern promotes a "many-to-many relationship network" to "full object status". Modelling the inter-relationships with an object enhances encapsulation, and allows the behavior of those inter-relationships to be modified or extended through subclassing.
+
+The Mediator defines the interface for communication between Colleague objects. The ConcreteMediator implements the Mediator interface and coordinates communication between Colleague objects. It is aware of all the Colleagues and their purpose with regards to inter communication.The ConcreteColleague communicates with other colleagues through the mediator.
+
+Without this pattern, all of the Colleagues would know about each other, leading to high coupling. By having all colleagues communicate through one central point we have a decoupled system while maintaining control on the object's interactions.
