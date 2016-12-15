@@ -8,6 +8,7 @@
 * [Composite](#composite)
 * [Iterator](#iterator)
 * [Commands](#commands)
+* [Adapter](#adapter)
 
 
 ## Five Main Points
@@ -217,3 +218,21 @@ The Mediator pattern promotes a "many-to-many relationship network" to "full obj
 The Mediator defines the interface for communication between Colleague objects. The ConcreteMediator implements the Mediator interface and coordinates communication between Colleague objects. It is aware of all the Colleagues and their purpose with regards to inter communication.The ConcreteColleague communicates with other colleagues through the mediator.
 
 Without this pattern, all of the Colleagues would know about each other, leading to high coupling. By having all colleagues communicate through one central point we have a decoupled system while maintaining control on the object's interactions.
+
+---
+### ADAPTER
+
+> Convert the interface of a class into another interface clients expect. An adapter lets classes work together that could not otherwise because of incompatible interfaces.
+
+http://en.wikipedia.org/wiki/Design_pattern_(computer_science)
+
+Ruby allows for classes to be modified at runtime.  Consequently, rather than create an adapter to modify a classes API, we can simply modify the class at runtime to add or alter methods.
+
+Alternatively, Ruby also allows the runtime modification of individual instances.
+
+Modifying instances or classes at run-time is advisable only when:
+
+* The modifications are simple
+* You understand the class you're modifying well and are sure your changes wont break things.
+
+If either of these points aren't true, it's probably better to create a separate adapter.
